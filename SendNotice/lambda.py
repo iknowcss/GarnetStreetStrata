@@ -7,9 +7,9 @@ def handler(event, context):
     db = boto3.client('dynamodb')
 
     try:
-        result = db.query(
+        result = db.scan(
             TableName=DISTRIBUTION_LIST_TABLE_NAME
         )
-        return {'Success': True, 'Items': result.Items}
+        return {'Success': True, 'Items': result.get('Items')}
     except BaseException as e:
         return {'Success': False, 'Error': str(e)}
