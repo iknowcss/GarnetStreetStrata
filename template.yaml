@@ -1,0 +1,32 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: 80 Garnet Street Strata infrastructure
+
+Parameters:
+  DeployEnv:
+    Type: String
+  PinpointProjectId:
+    Type: String
+
+Resources:
+  LambdaCommonLayer:
+    Type: AWS::Serverless::LayerVersion
+    Properties:
+      ContentUri: ./LambdaCommonLayer
+      RetentionPolicy: Delete
+
+  SendNotice:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: Sends a notice to the specified endpoints
+      Runtime: python3.8
+      CodeUri: ./SendNotice
+      Handler: lambda.handler
+      Layers:
+        - !Ref LambdaCommonLayer
+      Timeout: 8
+      MemorySize: 128
+      Environment:
+        Variables:
+          DEPLOY_ENV: !Ref DeployEnv
+          PINPOINT_PROJECT_ID: !Ref PinpointProjectId
