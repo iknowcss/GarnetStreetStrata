@@ -8,5 +8,5 @@ sam deploy \
   --parameter-overrides \
     "DeployEnv=$DEPLOY_ENV" \
     "PinpointProjectId=$PINPOINT_PROJECT_ID" \
-  --no-fail-on-empty-changeset
-  
+  --no-fail-on-empty-changeset \
+  --s3-bucket garnet-street-strata-build
