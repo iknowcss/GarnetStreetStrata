@@ -3,7 +3,6 @@ import boto3
 
 def handler(event, context):
     PINPOINT_PROJECT_ID = os.environ.get('PINPOINT_PROJECT_ID')
-    DISTRIBUTION_LIST_TABLE_NAME = os.environ.get('DISTRIBUTION_LIST_TABLE_NAME')
     db = boto3.client('dynamodb')
 
     try:

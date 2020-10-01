@@ -1,2 +1,5 @@
 .idea
 .deploy.env
+*.pyc
+__pycache__/
+.venv/
