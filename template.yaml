@@ -56,6 +56,10 @@ Resources:
                   - dynamodb:Scan
                 Resource:
                   - !GetAtt "DistributionList.Arn"
+              - Effect: Allow
+                Action: ['mobiletargeting:SendMessages']
+                Resource:
+                  - !Sub "arn:${AWS::Partition}:mobiletargeting:${AWS::Region}:${AWS::AccountId}:apps/${PinpointProjectId}/messages"
 
   DistributionList:
     Type: AWS::DynamoDB::Table
