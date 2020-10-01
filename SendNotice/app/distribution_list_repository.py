@@ -7,7 +7,7 @@ def get_entries():
     """
     A list of all destination addresses in the distribution list
 
-    :rtype: list of str | None
+    :rtype: list of DistributionListEntry | None
     :returns: The list of addresses when successful, otherwise `None`.
     """
 

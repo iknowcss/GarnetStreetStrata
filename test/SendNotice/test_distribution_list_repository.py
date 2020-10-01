@@ -2,8 +2,8 @@ import mock
 import os
 import boto3
 from moto import mock_dynamodb2
-from SendNotice.distribution_list_repository import get_entries, put_sms_entry
-from SendNotice.distribution_list_entry import DistributionListEntry, RecipientInfo
+from SendNotice.app.distribution_list_repository import get_entries, put_sms_entry
+from SendNotice.app.distribution_list_entry import DistributionListEntry, RecipientInfo
 
 
 @mock_dynamodb2

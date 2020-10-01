@@ -21,7 +21,7 @@ Resources:
       Description: Sends a notice to the specified endpoints
       Runtime: python3.8
       CodeUri: ./SendNotice
-      Handler: lambda.handler
+      Handler: app.lambda.handler
       Role: !GetAtt 'SendNoticeRole.Arn'
 #      Layers:
 #        - !Ref LambdaCommonLayer
