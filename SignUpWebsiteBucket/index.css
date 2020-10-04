@@ -1,0 +1,53 @@
+h1 {
+  font-size: 1.5rem;
+}
+
+.main {
+  margin: auto;
+  max-width: 640px;
+  line-height: 1.3;
+}
+
+.main-heading {
+  margin: 1em 16px 0.5em 16px;
+}
+
+.sign-up-form-container {
+  max-width: 480px;
+  margin: auto;
+}
+.sign-up-form {
+  margin: 16px;
+  font-size: 18px;
+}
+
+.sign-up-form legend {
+  font-weight: bold;
+}
+
+.sign-up-form label,
+.sign-up-form button[type="submit"] {
+  margin-top: 1em;
+}
+
+.sign-up-form__unit-number-input {
+  width: 5em;
+}
+
+.required-asterisk {
+  color: #f00;
+}
+
+.sign-up-form__accept-terms-label {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+}
+.sign-up-form__accept-terms-checkbox {
+  margin-right: 8px;
+  line-height: 1.5;
+}
+.sign-up-form__accept-terms-label-text {
+  line-height: 1.5;
+  font-size: 14px;
+}

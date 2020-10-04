@@ -9,12 +9,6 @@ Parameters:
     Type: String
 
 Resources:
-#  LambdaCommonLayer:
-#    Type: AWS::Serverless::LayerVersion
-#    Properties:
-#      ContentUri: ./LambdaCommonLayer
-#      RetentionPolicy: Delete
-
   SendNotice:
     Type: AWS::Serverless::Function
     Properties:
@@ -23,8 +17,6 @@ Resources:
       CodeUri: ./SendNotice
       Handler: app.lambda.handler
       Role: !GetAtt 'SendNoticeRole.Arn'
-#      Layers:
-#        - !Ref LambdaCommonLayer
       Timeout: 8
       MemorySize: 128
       Environment:
@@ -32,6 +24,7 @@ Resources:
           DEPLOY_ENV: !Ref DeployEnv
           PINPOINT_PROJECT_ID: !Ref PinpointProjectId
           DISTRIBUTION_LIST_TABLE_NAME: !Ref 'DistributionList'
+
   SendNoticeRole:
     Type: AWS::IAM::Role
     Properties:
@@ -75,3 +68,51 @@ Resources:
         PointInTimeRecoveryEnabled: false
       SSESpecification:
         SSEEnabled: TRUE
+
+  SignUpWebsiteBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: strata80garnetstreet.com
+
+  SignUpWebsiteBucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref SignUpWebsiteBucket
+      PolicyDocument:
+        Statement:
+          - Effect: Allow
+            Action: 's3:GetObject'
+            Resource:
+              - !Sub "arn:aws:s3:::${SignUpWebsiteBucket}/*"
+            Principal:
+              AWS: !Sub "arn:aws:iam::cloudfront:user/CloudFront Origin Access Identity ${SignUpWebsiteCloudFrontOAI}"
+
+  SignUpWebsiteCloudFrontOAI:
+    Type: 'AWS::CloudFront::CloudFrontOriginAccessIdentity'
+    Properties:
+      CloudFrontOriginAccessIdentityConfig:
+        Comment: 'Sign-up website Origin Access Identity'
+
+  CloudfrontDistribution:
+    Type: "AWS::CloudFront::Distribution"
+    Properties:
+      DistributionConfig:
+        Comment: "Sign-up website Cloudfront distribution"
+        DefaultRootObject: "index.html"
+        Enabled: true
+        HttpVersion: http2
+        Origins:
+          - Id: s3-website
+            DomainName: !GetAtt SignUpWebsiteBucket.DomainName
+            S3OriginConfig:
+              OriginAccessIdentity: !Sub 'origin-access-identity/cloudfront/${SignUpWebsiteCloudFrontOAI}'
+        DefaultCacheBehavior:
+          Compress: 'true'
+          AllowedMethods:
+            - GET
+            - HEAD
+            - OPTIONS
+          ForwardedValues:
+            QueryString: false
+          TargetOriginId: s3-website
+          ViewerProtocolPolicy: redirect-to-https
