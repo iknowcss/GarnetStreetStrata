@@ -17,6 +17,12 @@ Resources:
       CompatibleRuntimes:
         - python3.8
 
+  SignUpApi:
+    Type: AWS::Serverless::HttpApi
+    Properties:
+      StageName: !Ref DeployEnv
+      CorsConfiguration: True
+
   SignUpEndpoint:
     Type: AWS::Serverless::Function
     Properties:
@@ -27,11 +33,12 @@ Resources:
       CodeUri: ./SignUpEndpoint
       Handler: app.lambda.handler
       Events:
-        Api:
-          Type: Api
+        PostMessage:
+          Type: HttpApi
           Properties:
+            ApiId: !Ref SignUpApi
+            Method: POST
             Path: /distributionList
-            Method: post
       Role: !GetAtt 'SignUpEndpointRole.Arn'
       Timeout: 8
       MemorySize: 128
@@ -58,6 +65,10 @@ Resources:
           PolicyDocument:
             Version: 2012-10-17
             Statement:
+              - Effect: Allow
+                Action: ['logs:CreateLogGroup', 'logs:CreateLogStream', 'logs:PutLogEvents']
+                Resource:
+                  - !Sub "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/*"
               - Effect: Allow
                 Action:
                   - dynamodb:PutItem
@@ -104,6 +115,10 @@ Resources:
           PolicyDocument:
             Version: 2012-10-17
             Statement:
+              - Effect: Allow
+                Action: ['logs:CreateLogGroup', 'logs:CreateLogStream', 'logs:PutLogEvents']
+                Resource:
+                  - !Sub "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/*"
               - Effect: Allow
                 Action:
                   - dynamodb:BatchGetItem

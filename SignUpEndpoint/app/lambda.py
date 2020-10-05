@@ -22,10 +22,12 @@ def parse_http_sign_up_event(event):
 def handler(event, context):
     request = parse_http_sign_up_event(event)
     if request is None:
+        print('handler: request could not be parsed')
         return {'statusCode': 400, 'body': json.dumps({'Success': False})}
 
     entry = request.get('entry')
     if entry is None:
+        print('handler: request did not include a valid entry')
         return {
             'statusCode': 400,
             'body': json.dumps({'Success': False, 'Error': 'Could not parse DistributionListEntry'}),
@@ -33,12 +35,16 @@ def handler(event, context):
 
     is_valid_passcode_result = is_valid_passcode(request.get('passcode'))
     if is_valid_passcode_result is None:
+        print('handler: failed to check passcode')
         return {'statusCode': 500, 'body': json.dumps({'Success': False, 'Error': 'Failed to check passcode'})}
     if not is_valid_passcode_result:
+        print('handler: invalid passcode')
         return {'statusCode': 400, 'body': json.dumps({'Success': False, 'Error': 'Invalid passcode'})}
 
     put_result = put_entry(entry)
     if put_result.get('Success') is not True:
+        print('handler: failed to store entry')
         return {'statusCode': 500, 'body': json.dumps({'Success': False, 'Error': 'Failed to store entry'})}
 
+    print('handler: stored entry')
     return {'statusCode': 200, 'body': json.dumps({'Success': True})}
