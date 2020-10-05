@@ -1,5 +1,8 @@
 .idea
-.deploy.env
-*.pyc
 __pycache__/
 .venv/
+node_modules/
+.deploy.env
+*.pyc
+package-lock.json
+yarn-error.log

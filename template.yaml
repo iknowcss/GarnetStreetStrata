@@ -28,7 +28,7 @@ Resources:
           - "*"
         AllowOrigins:
           - !Join ['', ['https://', !GetAtt 'CloudfrontDistribution.DomainName']]
-
+          - 'http://localhost:8080'
 
   SignUpEndpoint:
     Type: AWS::Serverless::Function
@@ -82,6 +82,10 @@ Resources:
                   - dynamodb:PutItem
                 Resource:
                   - !GetAtt "DistributionList.Arn"
+              - Effect: Allow
+                Action: ['mobiletargeting:SendMessages']
+                Resource:
+                  - !Sub "arn:${AWS::Partition}:mobiletargeting:${AWS::Region}:${AWS::AccountId}:apps/${PinpointProjectId}/messages"
               - Effect: Allow
                 Action:
                   - ssm:GetParameter

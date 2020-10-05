@@ -33,7 +33,11 @@ def handler(event, context):
         print('handler: user did not accept terms')
         return {
             'statusCode': 400,
-            'body': json.dumps({'Success': False, 'Error': 'acceptTerms must be true'}),
+            'body': json.dumps({
+                'Success': False,
+                'Error': 'acceptTerms must be true',
+                'ErrorCode': 'TERMS_NOT_ACCEPTED',
+            }),
         }
 
     entry = request.get('entry')
@@ -41,7 +45,11 @@ def handler(event, context):
         print('handler: request did not include a valid entry')
         return {
             'statusCode': 400,
-            'body': json.dumps({'Success': False, 'Error': 'Could not parse DistributionListEntry'}),
+            'body': json.dumps({
+                'Success': False,
+                'Error': 'Could not parse DistributionListEntry',
+                'ErrorCode': 'INVALID_SIGN_UP_DATA',
+            }),
         }
 
     is_valid_passcode_result = is_valid_passcode(request.get('passcode'))
@@ -50,7 +58,11 @@ def handler(event, context):
         return {'statusCode': 500, 'body': json.dumps({'Success': False, 'Error': 'Failed to check passcode'})}
     if not is_valid_passcode_result:
         print('handler: invalid passcode')
-        return {'statusCode': 400, 'body': json.dumps({'Success': False, 'Error': 'Invalid passcode'})}
+        return {'statusCode': 400, 'body': json.dumps({
+            'Success': False,
+            'Error': 'Invalid passcode',
+                'ErrorCode': 'INVALID_PASSCODE',
+        })}
 
     put_result = put_entry(entry)
     if put_result.get('Success') is not True:
