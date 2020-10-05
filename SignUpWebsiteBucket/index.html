@@ -10,7 +10,7 @@
   <div class="main">
     <h1 class="main-heading">Garnet Street Strata</h1>
     <div class="sign-up-form-container">
-      <form class="pure-form pure-form-stacked sign-up-form">
+      <form class="pure-form pure-form-stacked sign-up-form" id="SignUpForm" method="POST">
         <fieldset>
           <legend>Sign-up for strata notifications</legend>
 
@@ -18,22 +18,23 @@
             Receive notifications from the strata committee about upcoming building works and community events!
           </span>
 
+          <input type="hidden" name="addressType" value="SMS">
           <label for="mobileNumber">Mobile phone number <span class="required-asterisk">*</span></label>
-          <input type="tel" id="mobileNumber" placeholder="0400 000 000" required="" class="pure-input-1">
+          <input type="tel" id="mobileNumber" name="mobileNumber" placeholder="0400 000 000" required="" class="pure-input-1">
 
           <label for="occupantType">I am <span class="required-asterisk">*</span></label>
-          <select id="occupantType" class="pure-input-1" required>
+          <select id="occupantType" name="occupantType" class="pure-input-1" required>
             <option value="OWNER">an owner</option>
             <option value="RENTER">a renter</option>
           </select>
 
           <label for="unitNumber">Unit number</label>
-          <input type="number" id="unitNumber" placeholder="Unit" maxlength="2" class="pure-input-1-3" min="1" max="99">
+          <input type="number" id="unitNumber" name="unitNumber" placeholder="Unit" maxlength="2" class="pure-input-1-3" min="1" max="99">
 
           <label for="acceptTermsCheckbox">
             <div class="sign-up-form__accept-terms-label">
               <span class="sign-up-form__accept-terms-checkbox">
-                <input type="checkbox" id="acceptTermsCheckbox" value="accept" required/>
+                <input type="checkbox" id="acceptTermsCheckbox" name="acceptTerms" value="true" required/>
               </span>
               <span class="sign-up-form__accept-terms-label-text">
                 I consent to receive occasional informational messages from the strata committee of Strata Plan 21620
@@ -47,5 +48,6 @@
       </form>
     </div>
   </div>
+  <script type="text/javascript" src="./main.js"></script>
 </body>
 </html>

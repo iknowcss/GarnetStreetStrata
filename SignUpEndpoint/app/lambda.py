@@ -13,6 +13,7 @@ def parse_http_sign_up_event(event):
         return {
             'entry': DistributionListEntry.from_json_map(body.get('entry')),
             'passcode': body.get('passcode'),
+            'acceptTerms': body.get('acceptTerms'),
         }
     except BaseException as exception:
         print('Failed to parse request', exception)
@@ -24,6 +25,13 @@ def handler(event, context):
     if request is None:
         print('handler: request could not be parsed')
         return {'statusCode': 400, 'body': json.dumps({'Success': False})}
+
+    if request.get('acceptTerms') is not True:
+        print('handler: user did not accept terms')
+        return {
+            'statusCode': 400,
+            'body': json.dumps({'Success': False, 'Error': 'acceptTerms must be true'}),
+        }
 
     entry = request.get('entry')
     if entry is None:

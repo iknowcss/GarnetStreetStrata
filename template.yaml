@@ -21,7 +21,14 @@ Resources:
     Type: AWS::Serverless::HttpApi
     Properties:
       StageName: !Ref DeployEnv
-      CorsConfiguration: True
+      CorsConfiguration:
+        AllowMethods:
+          - POST
+        AllowHeaders:
+          - "*"
+        AllowOrigins:
+          - !Join ['', ['https://', !GetAtt 'CloudfrontDistribution.DomainName']]
+
 
   SignUpEndpoint:
     Type: AWS::Serverless::Function
