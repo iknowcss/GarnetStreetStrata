@@ -1,5 +1,6 @@
 from SendNotice.app.sms_service import build_message_request
 
+
 class TestSMSService:
     def test_build_message_request(self):
         request = build_message_request(

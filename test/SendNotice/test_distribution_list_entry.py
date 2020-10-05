@@ -1,4 +1,4 @@
-from SendNotice.app.distribution_list_entry import DistributionListEntry, RecipientInfo
+from gss_common.distribution_list_entry import DistributionListEntry, RecipientInfo
 
 class TestDistributionListEntry:
     def test_from_json_map_all_data(self):

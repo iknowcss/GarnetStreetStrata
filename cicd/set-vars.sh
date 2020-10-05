@@ -1,7 +1,9 @@
 #!/bin/sh
 set -eu
 
+export PYTHONPATH="$PWD/LambdaCommonLayer/python/lib/python3.8/local-packages"
 export DEPLOY_ENV="${DEPLOY_ENV:-dev}"
+export STACK_NAME="GarnetStreetStrata-${DEPLOY_ENV}"
 
 # Import deploy-env environment variables
 env_file="./cicd/deploy-env/${DEPLOY_ENV}.env"

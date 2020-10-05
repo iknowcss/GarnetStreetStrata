@@ -2,8 +2,8 @@ import mock
 import os
 import boto3
 from moto import mock_dynamodb2
-from SendNotice.app.distribution_list_repository import get_entries, put_sms_entry
-from SendNotice.app.distribution_list_entry import DistributionListEntry, RecipientInfo
+from gss_common.distribution_list_repository import get_entries, put_sms_entry
+from gss_common.distribution_list_entry import DistributionListEntry, RecipientInfo
 
 
 @mock_dynamodb2
@@ -70,7 +70,7 @@ class TestDistributionListRepository:
 
     def test_put_sms_entry(self):
         self.seed_items([DistributionListEntry('+61400100100', 'SMS', RecipientInfo('RENTER'))])
-        assert put_sms_entry('+61400100200', RecipientInfo('OWNER', '49')) is True
+        assert put_sms_entry('+61400100200', RecipientInfo('OWNER', '49')).get('Success') is True
         result = get_entries()
         assert set([(
             entry.destination_address,
@@ -84,4 +84,4 @@ class TestDistributionListRepository:
 
     def test_put_sms_entry_exception(self):
         self.__drop_table()
-        assert put_sms_entry('+61400100200', RecipientInfo('RENTER')) is False
+        assert put_sms_entry('+61400100200', RecipientInfo('RENTER')).get('Success') is False

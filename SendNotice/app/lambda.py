@@ -1,5 +1,18 @@
-from .distribution_list_repository import get_entries
+import sys
+sys.path.append('/opt/python/lib/python3.8/local-packages')
+
+from gss_common.distribution_list_repository import get_entries
 from .sms_service import send_sms
+
+
+def is_health_check(event):
+    try:
+        health_check_value = event.get('HealthCheck')
+        if health_check_value is True:
+            return True
+    except BaseException:
+        pass
+    return False
 
 
 def parse_sms_message_body(event):
@@ -11,6 +24,9 @@ def parse_sms_message_body(event):
 
 
 def handler(event, context):
+    if is_health_check(event):
+        return {'Success': True, 'Healthy': True}
+
     sms_message_body = parse_sms_message_body(event)
     if sms_message_body is None:
         return {'Success': False, 'Error': 'Failed to parse SMS message body'}

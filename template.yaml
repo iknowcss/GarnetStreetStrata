@@ -9,11 +9,73 @@ Parameters:
     Type: String
 
 Resources:
+  LambdaCommonLayer:
+    Type: AWS::Serverless::LayerVersion
+    Properties:
+      Description: Garnet Street Strata common libs
+      ContentUri: ./LambdaCommonLayer
+      CompatibleRuntimes:
+        - python3.8
+
+  SignUpEndpoint:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: Accepts sign-up submissions
+      Runtime: python3.8
+      Layers:
+        - !Ref 'LambdaCommonLayer'
+      CodeUri: ./SignUpEndpoint
+      Handler: app.lambda.handler
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /distributionList
+            Method: post
+      Role: !GetAtt 'SignUpEndpointRole.Arn'
+      Timeout: 8
+      MemorySize: 128
+      Environment:
+        Variables:
+          DEPLOY_ENV: !Ref DeployEnv
+          DISTRIBUTION_LIST_TABLE_NAME: !Ref 'DistributionList'
+          SIGN_UP_PASSCODE_KEY_ID: !Sub '/${AWS::StackName}/SignUpEndpoint/SignUpPasscode'
+
+  SignUpEndpointRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: ['lambda.amazonaws.com']
+            Action: ['sts:AssumeRole']
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaRole
+      Policies:
+        - PolicyName: root
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Effect: Allow
+                Action:
+                  - dynamodb:PutItem
+                Resource:
+                  - !GetAtt "DistributionList.Arn"
+              - Effect: Allow
+                Action:
+                  - ssm:GetParameter
+                Resource:
+                  - !Sub "arn:${AWS::Partition}:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${AWS::StackName}/SignUpEndpoint/*"
+
   SendNotice:
     Type: AWS::Serverless::Function
     Properties:
       Description: Sends a notice to the specified endpoints
       Runtime: python3.8
+      Layers:
+        - !Ref 'LambdaCommonLayer'
       CodeUri: ./SendNotice
       Handler: app.lambda.handler
       Role: !GetAtt 'SendNoticeRole.Arn'
@@ -22,8 +84,8 @@ Resources:
       Environment:
         Variables:
           DEPLOY_ENV: !Ref DeployEnv
-          PINPOINT_PROJECT_ID: !Ref PinpointProjectId
           DISTRIBUTION_LIST_TABLE_NAME: !Ref 'DistributionList'
+          PINPOINT_PROJECT_ID: !Ref PinpointProjectId
 
   SendNoticeRole:
     Type: AWS::IAM::Role

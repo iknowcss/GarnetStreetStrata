@@ -36,13 +36,13 @@ def put_sms_entry(destination_address, recipient_info):
 
     :param str destination_address: The endpoint address, e.g. `'+61400500600'`
     :param RecipientInfo recipient_info: The endpoint address, e.g. `'+61400500600'`
-    :rtype: bool
-    :returns: `True` when added successfully, otherwise `False`.
+    :rtype: dict
+    :returns: `{'Success': True}` when added successfully, otherwise `{'Success': False}`.
     """
-    return __put_entry(DistributionListEntry(destination_address, 'SMS', recipient_info))
+    return put_entry(DistributionListEntry(destination_address, 'SMS', recipient_info))
 
 
-def __put_entry(entry):
+def put_entry(entry):
     client = boto3.client('dynamodb')
     table_name = os.environ.get('DISTRIBUTION_LIST_TABLE_NAME')
 
@@ -51,7 +51,10 @@ def __put_entry(entry):
             TableName=table_name,
             Item=entry.to_ddb(),
         )
-        return result.get('ResponseMetadata').get('HTTPStatusCode') == 200
+        if result.get('ResponseMetadata').get('HTTPStatusCode') != 200:
+            print('Failed to add new destination to distribution list data source', result)
+            return {'Success': False}
+        return {'Success': True}
     except BaseException as exception:
         print('Failed to add new destination to distribution list data source', exception)
-        return False
+        return {'Success': False}
