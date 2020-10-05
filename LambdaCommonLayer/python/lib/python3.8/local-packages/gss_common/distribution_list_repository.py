@@ -50,11 +50,16 @@ def put_entry(entry):
         result = client.put_item(
             TableName=table_name,
             Item=entry.to_ddb(),
+            ReturnValues='ALL_OLD',
         )
         if result.get('ResponseMetadata').get('HTTPStatusCode') != 200:
             print('Failed to add new destination to distribution list data source', result)
             return {'Success': False}
-        return {'Success': True}
+        old_destination_address = result.get('Attributes', {}).get('DestinationAddress', {}).get('S')
+        return {
+            'Success': True,
+            'IsNewEntry': old_destination_address is None,
+        }
     except BaseException as exception:
         print('Failed to add new destination to distribution list data source', exception)
         return {'Success': False}

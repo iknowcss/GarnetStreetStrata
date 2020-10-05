@@ -1,4 +1,4 @@
-from SendNotice.app.sms_service import build_message_request
+from gss_common.sms_service import build_message_request
 
 
 class TestSMSService:

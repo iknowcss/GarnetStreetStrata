@@ -54,6 +54,7 @@ Resources:
           DEPLOY_ENV: !Ref DeployEnv
           DISTRIBUTION_LIST_TABLE_NAME: !Ref 'DistributionList'
           SIGN_UP_PASSCODE_KEY_ID: !Sub '/${AWS::StackName}/SignUpEndpoint/SignUpPasscode'
+          PINPOINT_PROJECT_ID: !Ref PinpointProjectId
 
   SignUpEndpointRole:
     Type: AWS::IAM::Role

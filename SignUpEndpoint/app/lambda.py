@@ -4,7 +4,10 @@ sys.path.append('/opt/python/lib/python3.8/local-packages')
 import json
 from gss_common.distribution_list_entry import DistributionListEntry
 from gss_common.distribution_list_repository import put_entry
+from gss_common.sms_service import send_sms
 from .sign_up_passcode import is_valid_passcode
+
+INTRO_SMS_BODY = 'Welcome to the Garnet Street Strata notification service!\n\nTo cancel, text "STOP" at any time'
 
 
 def parse_http_sign_up_event(event):
@@ -55,4 +58,11 @@ def handler(event, context):
         return {'statusCode': 500, 'body': json.dumps({'Success': False, 'Error': 'Failed to store entry'})}
 
     print('handler: stored entry')
+    if put_result.get('IsNewEntry'):
+        print('handler: new entry, send intro SMS')
+        send_sms_result = send_sms(INTRO_SMS_BODY, [entry.destination_address])
+        if send_sms_result is not True:
+            print('handler: failed to send intro SMS')
+    else:
+        print('handler: do not send intro SMS')
     return {'statusCode': 200, 'body': json.dumps({'Success': True})}
