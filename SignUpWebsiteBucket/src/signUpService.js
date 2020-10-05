@@ -4,8 +4,11 @@ module.exports.getSignUpPasscode = function () {
   const queryParamPairs = document.location.search.substr(1)
     .split('&')
     .map(s => s.split('='));
-  const [, passcode] = queryParamPairs.find(([key]) => key === 'passcode') || [];
-  return passcode;
+  const [, encodedPasscode] = queryParamPairs.find(([key]) => key === 'passcode') || [];
+  if (encodedPasscode) {
+    return atob(decodeURIComponent(encodedPasscode));
+  }
+  return undefined;
 };
 
 module.exports.submitSignUp = (signUpData) => fetch(SIGN_UP_ENDPOINT, {
