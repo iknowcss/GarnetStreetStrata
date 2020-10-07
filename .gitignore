@@ -6,3 +6,4 @@ node_modules/
 *.pyc
 package-lock.json
 yarn-error.log
+site-packages
