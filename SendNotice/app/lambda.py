@@ -6,8 +6,8 @@ sys.path.append('/opt/python/lib/python3.8/local-packages')
 
 from gss_common.distribution_list_repository import get_entries
 from gss_common.sms_service import send_sms
+import gss_common.init_logging
 
-logging.basicConfig(level=os.environ.get('LOGLEVEL', 'INFO').upper())
 logger = logging.getLogger(__name__)
 
 

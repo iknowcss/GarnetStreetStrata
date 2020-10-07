@@ -7,9 +7,9 @@ import json
 from gss_common.distribution_list_entry import DistributionListEntry
 from gss_common.distribution_list_repository import put_entry
 from gss_common.sms_service import send_sms
+import gss_common.init_logging
 from .sign_up_passcode import is_valid_passcode
 
-logging.basicConfig(level=os.environ.get('LOGLEVEL', 'INFO').upper())
 logger = logging.getLogger(__name__)
 
 INTRO_SMS_BODY = 'Welcome to the Garnet Street Strata notification service!\n\nTo cancel, text "STOP" at any time'
