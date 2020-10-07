@@ -1,8 +1,8 @@
 import os
-import logging
+from gss_common.logging import get_common_logger
 from gss_common.secret_parameter import get_secret_parameter
 
-logger = logging.getLogger(__name__)
+logger = get_common_logger(__name__)
 
 
 def is_valid_passcode(passcode):
