@@ -11,7 +11,6 @@ def build_message_request(message, destination_addresses):
         'MessageConfiguration': {'SMSMessage': {
             'Body': message,
             'MessageType': 'PROMOTIONAL',
-            'SenderId': 'GrnetStrata',
         }},
     }
 

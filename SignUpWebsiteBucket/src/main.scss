@@ -42,7 +42,7 @@ h2 { font-size: 1.2rem; }
   }
 
   &-submit-button {
-    margin-right: 16px;
+    margin: 0 12px 0 0 !important;
   }
 
   &-submit-row--processing &-submit-button {
@@ -90,7 +90,8 @@ h2 { font-size: 1.2rem; }
 .sign-up-result {
   &-container {
     max-width: 480px;
-    margin: auto;
+    margin: 16px;
+    font-size: 18px;
   }
 
   &-heading {
