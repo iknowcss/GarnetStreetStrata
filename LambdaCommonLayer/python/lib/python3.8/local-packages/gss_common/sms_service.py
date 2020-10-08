@@ -1,5 +1,8 @@
 import os
+import logging
 import boto3
+
+logger = logging.getLogger(__name__)
 
 
 def build_message_request(message, destination_addresses):
@@ -24,5 +27,5 @@ def send_sms(message, destination_addresses):
         )
         return True
     except BaseException as exception:
-        print('send_sms failed', exception)
+        logger.warning('Failed to send SMS', exception)
         return False

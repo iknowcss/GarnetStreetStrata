@@ -15,4 +15,3 @@ class TestSMSService:
         sms_message = request.get('MessageConfiguration').get('SMSMessage')
         assert sms_message.get('Body') == 'This is a test'
         assert sms_message.get('MessageType') == 'PROMOTIONAL'
-        assert sms_message.get('SenderId') == 'GrnetStrata'

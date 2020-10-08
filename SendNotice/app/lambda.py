@@ -1,12 +1,14 @@
 import sys
 import json
+import logging
 sys.path.append('/opt/python/lib/python3.8/local-packages')
 
 from gss_common.distribution_list_repository import get_entries
 from gss_common.sms_service import send_sms
-from gss_common.logging import get_common_logger
+from gss_common.logging import init_logging
 
-logger = get_common_logger(__name__)
+init_logging()
+logger = logging.getLogger(__name__)
 
 
 def is_health_check(event):

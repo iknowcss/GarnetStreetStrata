@@ -1,5 +1,7 @@
+import logging
 import re
 
+logger = logging.getLogger(__name__)
 OCCUPANT_TYPE_PATTERN = re.compile('^(RENTER|OWNER)$')
 DESTINATION_ADDRESS_SMS_AU = re.compile('^\\+61[1-9][0-9]{8}$')
 ADDRESS_TYPE_PATTER = re.compile('^(SMS)$')
@@ -25,11 +27,11 @@ class RecipientInfo:
     @staticmethod
     def from_json_map(json_map):
         if json_map is None:
-            print('RecipientInfo.from_json_map: json_map is None')
+            logger.info('from_json_map: json_map is None')
             return None
         occupant_type = parse_value(OCCUPANT_TYPE_PATTERN, json_map.get('occupantType', None))
         if occupant_type is None:
-            print('RecipientInfo.from_json_map: Failed to parse occupantType')
+            logger.info('from_json_map: Failed to parse occupantType')
             return None
         unit_number = json_map.get('unitNumber', None)
         if type(unit_number) == str:
@@ -94,7 +96,7 @@ class DistributionListEntry:
         address_type = parse_value(ADDRESS_TYPE_PATTER, json_map.get('AddressType', None))
         recipient_info = RecipientInfo.from_json_map(json_map.get('RecipientInfo', None))
         if destination_address is None or address_type is None or recipient_info is None:
-            print('DistributionListEntry.from_json_map: Missing', {
+            logger.info('from_json_map: Missing data', {
                 "destination_address": destination_address is None,
                 "address_type": address_type is None,
                 "recipient_info": recipient_info is None,

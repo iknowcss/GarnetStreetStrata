@@ -1,6 +1,9 @@
 import os
+import logging
 import boto3
 from .distribution_list_entry import DistributionListEntry
+
+logger = logging.getLogger(__name__)
 
 
 def get_entries():
@@ -25,7 +28,7 @@ def get_entries():
         for page in iterator:
             entries.extend([DistributionListEntry.from_ddb(item) for item in page.get('Items')])
     except BaseException as exception:
-        print('Failed to fetch distribution list from data source', exception)
+        logger.warning('Failed to fetch distribution list from data source', exception)
         return None
     return entries
 
@@ -53,7 +56,7 @@ def put_entry(entry):
             ReturnValues='ALL_OLD',
         )
         if result.get('ResponseMetadata').get('HTTPStatusCode') != 200:
-            print('Failed to add new destination to distribution list data source', result)
+            logger.warning('Failed to add new destination to distribution list data source', result)
             return {'Success': False}
         old_destination_address = result.get('Attributes', {}).get('DestinationAddress', {}).get('S')
         return {
@@ -61,5 +64,5 @@ def put_entry(entry):
             'IsNewEntry': old_destination_address is None,
         }
     except BaseException as exception:
-        print('Failed to add new destination to distribution list data source', exception)
+        logger.warning('Failed to add new destination to distribution list data source', exception)
         return {'Success': False}
