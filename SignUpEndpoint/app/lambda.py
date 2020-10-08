@@ -1,8 +1,8 @@
 import sys
+import json
 import logging
 sys.path.append('/opt/python/lib/python3.8/local-packages')
 
-import json
 from gss_common.distribution_list_entry import DistributionListEntry
 from gss_common.distribution_list_repository import put_entry
 from gss_common.sms_service import send_sms
