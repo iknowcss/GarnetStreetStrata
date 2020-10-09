@@ -13,7 +13,7 @@ init_logging()
 
 logger = logging.getLogger(__name__)
 
-INTRO_SMS_BODY = 'Welcome to the Garnet Street Strata notification service!\n\nTo cancel, text "STOP" at any time'
+INTRO_SMS_BODY = 'Welcome to the Garnet Street Strata notification service!\n\nTo opt-out, go to bit.ly/gsoptout'
 
 
 def parse_http_sign_up_event(event):

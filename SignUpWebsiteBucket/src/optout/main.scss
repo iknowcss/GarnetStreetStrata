@@ -1,0 +1,18 @@
+@import '../common/common';
+
+.opt-out-form {
+  font-size: 18px;
+
+  legend {
+    font-weight: bold;
+  }
+
+  label {
+    margin-top: 1em;
+  }
+
+  &-container {
+    max-width: 480px;
+    margin: auto;
+  }
+}

@@ -1,16 +1,14 @@
 const FormDataAdapter = require('./FormDataAdapter');
+const FormSubmitLock = require('../common/FormSubmitLock');
 const { getSignUpPasscode, submitSignUp } = require('./signUpService');
 
 require('./main.scss');
 
-const forEach = (list, handler) => [].forEach.call(list, handler);
 const signUpForm = document.getElementById('SignUpForm');
 const signUpFormContainer = document.getElementById('SignUpFormContainer');
 const signUpFormSubmitRow = document.getElementById('SignUpFormSubmitRow');
 const signUpSuccessContainer = document.getElementById('SignUpSuccessContainer');
 const signUpFormErrorRow = document.getElementById('SignUpFormErrorRow');
-
-let reEnableList = null;
 
 function addClassNames(element, ...newClassNames) {
   const classNames = (element.getAttribute('class') || '').split(/\s+/);
@@ -23,27 +21,19 @@ function removeClassNames(element, ...removeClassNames) {
   element.setAttribute('class', filteredNames.join(' '));
 }
 
+const formSubmitLock = new FormSubmitLock(signUpForm);
 function lockSignUp() {
-  if (reEnableList) {
-    return false;
+  if (formSubmitLock.lock()) {
+    addClassNames(signUpFormSubmitRow, 'gss-form-submit-row--processing');
+    signUpFormErrorRow.style.display = 'none';
+    return true;
   }
-  reEnableList = [];
-  signUpFormErrorRow.style.display = 'none';
-  forEach(signUpForm.elements, element => {
-    if (!element.getAttribute('disabled')) {
-      element.setAttribute('disabled', 'disabled');
-      reEnableList.push(element);
-    }
-  });
-  addClassNames(signUpFormSubmitRow, 'sign-up-form-submit-row--processing');
-  return true;
+  return false;
 }
 
 function unlockSignUp() {
-  if (reEnableList) {
-    forEach(reEnableList, element => element.removeAttribute('disabled'));
-    removeClassNames(signUpFormSubmitRow, 'sign-up-form-submit-row--processing');
-    reEnableList = null;
+  if (formSubmitLock.unlock()) {
+    removeClassNames(signUpFormSubmitRow, 'gss-form-submit-row--processing');
     return true;
   }
   return false;

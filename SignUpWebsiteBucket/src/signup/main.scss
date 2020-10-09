@@ -1,0 +1,32 @@
+@import '../common/common';
+
+
+
+.sign-up-form__accept-terms {
+  &-label {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+
+    &-text {
+      line-height: 1.5;
+      font-size: 14px;
+    }
+  }
+
+  &-checkbox {
+    margin-right: 8px;
+    line-height: 1.2;
+  }
+}
+
+.sign-up-result {
+  &__heading {
+    text-align: center;
+  }
+
+  &__icon {
+    width: 128px;
+    margin: auto;
+  }
+}
