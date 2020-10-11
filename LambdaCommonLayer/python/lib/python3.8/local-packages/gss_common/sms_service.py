@@ -14,6 +14,7 @@ def build_message_request(message, destination_addresses):
         'MessageConfiguration': {'SMSMessage': {
             'Body': message,
             'MessageType': 'PROMOTIONAL',
+            'SenderId': 'GrnetStrata',
         }},
     }
 
@@ -26,6 +27,6 @@ def send_sms(message, destination_addresses):
             MessageRequest=build_message_request(message, destination_addresses),
         )
         return True
-    except BaseException as exception:
-        logger.warning('Failed to send SMS', exception)
+    except BaseException:
+        logger.warning('Failed to send SMS', exc_info=True)
         return False

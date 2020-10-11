@@ -27,8 +27,8 @@ def get_entries():
         )
         for page in iterator:
             entries.extend([DistributionListEntry.from_ddb(item) for item in page.get('Items')])
-    except BaseException as exception:
-        logger.warning('Failed to fetch distribution list from data source', exception)
+    except BaseException:
+        logger.warning('Failed to fetch distribution list from data source', exc_info=True)
         return None
     return entries
 
@@ -63,6 +63,6 @@ def put_entry(entry):
             'Success': True,
             'IsNewEntry': old_destination_address is None,
         }
-    except BaseException as exception:
-        logger.warning('Failed to add new destination to distribution list data source', exception)
+    except BaseException:
+        logger.warning('Failed to add new destination to distribution list data source', exc_info=True)
         return {'Success': False}

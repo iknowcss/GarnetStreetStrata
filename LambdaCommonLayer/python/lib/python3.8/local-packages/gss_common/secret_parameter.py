@@ -15,6 +15,6 @@ def get_secret_parameter(key_id):
             logger.info('Parameter does not exist', key_id)
             return None
         return result
-    except BaseException as exception:
-        logger.warning('Failed to get secret parameter', exception)
+    except BaseException:
+        logger.warning('Failed to get secret parameter', exc_info=True)
         return None

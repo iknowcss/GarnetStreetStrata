@@ -13,7 +13,7 @@ init_logging()
 
 logger = logging.getLogger(__name__)
 
-INTRO_SMS_BODY = 'Welcome to the Garnet Street Strata notification service!\n\nTo opt-out, go to bit.ly/gsoptout'
+INTRO_SMS_BODY = 'Welcome to the Garnet Street Strata notification service!\n\nTo opt-out, go to bit.ly/gststop'
 
 
 def parse_http_sign_up_event(event):
@@ -24,8 +24,8 @@ def parse_http_sign_up_event(event):
             'passcode': body.get('passcode'),
             'acceptTerms': body.get('acceptTerms'),
         }
-    except BaseException as exception:
-        logger.info('Exception while parsing sign-up request: %s', exception)
+    except BaseException:
+        logger.info('Exception while parsing sign-up request: %s', exc_info=True)
     return None
 
 

@@ -17,16 +17,16 @@ def is_health_check(event):
         if health_check_value is True:
             logger.info('Health check complete')
             return True
-    except BaseException as exception:
-        logger.warning('Health check failed: %s', exception)
+    except BaseException:
+        logger.warning('Health check failed: %s', exc_info=True)
     return False
 
 
 def parse_sms_message_body(event):
     try:
         return event.get('SMSMessageBody').strip()
-    except BaseException as exception:
-        logger.warning('Failed to parse SMS body from event: %s', exception)
+    except BaseException:
+        logger.warning('Failed to parse SMS body from event: %s', exc_info=True)
         logger.debug('Event data: %s', json.dumps(event))
         return None
 
