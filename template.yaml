@@ -24,39 +24,14 @@ Resources:
       CorsConfiguration:
         AllowMethods:
           - POST
+          - DELETE
         AllowHeaders:
           - "*"
         AllowOrigins:
           - !Join ['', ['https://', !GetAtt 'CloudfrontDistribution.DomainName']]
           - 'http://localhost:8080'
 
-  SignUpEndpoint:
-    Type: AWS::Serverless::Function
-    Properties:
-      Description: Accepts sign-up submissions
-      Runtime: python3.8
-      Layers:
-        - !Ref 'LambdaCommonLayer'
-      CodeUri: ./SignUpEndpoint
-      Handler: app.lambda.handler
-      Events:
-        PostMessage:
-          Type: HttpApi
-          Properties:
-            ApiId: !Ref SignUpApi
-            Method: POST
-            Path: /distributionList
-      Role: !GetAtt 'SignUpEndpointRole.Arn'
-      Timeout: 8
-      MemorySize: 128
-      Environment:
-        Variables:
-          DEPLOY_ENV: !Ref DeployEnv
-          DISTRIBUTION_LIST_TABLE_NAME: !Ref 'DistributionList'
-          SIGN_UP_PASSCODE_KEY_ID: !Sub '/${AWS::StackName}/SignUpEndpoint/SignUpPasscode'
-          PINPOINT_PROJECT_ID: !Ref PinpointProjectId
-
-  SignUpEndpointRole:
+  ApiEndpointRole:
     Type: AWS::IAM::Role
     Properties:
       AssumeRolePolicyDocument:
@@ -75,22 +50,68 @@ Resources:
             Statement:
               - Effect: Allow
                 Action: ['logs:CreateLogGroup', 'logs:CreateLogStream', 'logs:PutLogEvents']
-                Resource:
-                  - !Sub "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/*"
+                Resource: [!Sub "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/*"]
               - Effect: Allow
                 Action:
                   - dynamodb:PutItem
-                Resource:
-                  - !GetAtt "DistributionList.Arn"
+                  - dynamodb:DeleteItem
+                Resource: [!GetAtt "DistributionList.Arn"]
               - Effect: Allow
                 Action: ['mobiletargeting:SendMessages']
-                Resource:
-                  - !Sub "arn:${AWS::Partition}:mobiletargeting:${AWS::Region}:${AWS::AccountId}:apps/${PinpointProjectId}/messages"
+                Resource: [!Sub "arn:${AWS::Partition}:mobiletargeting:${AWS::Region}:${AWS::AccountId}:apps/${PinpointProjectId}/messages"]
               - Effect: Allow
-                Action:
-                  - ssm:GetParameter
-                Resource:
-                  - !Sub "arn:${AWS::Partition}:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${AWS::StackName}/SignUpEndpoint/*"
+                Action: [ssm:GetParameter]
+                Resource: [!Sub "arn:${AWS::Partition}:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${AWS::StackName}/SignUpEndpoint/*"]
+
+  SignUpEndpoint:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: Accepts sign-up submissions
+      Runtime: python3.8
+      Layers:
+        - !Ref 'LambdaCommonLayer'
+      CodeUri: ./SignUpEndpoint
+      Handler: app.lambda.handler
+      Events:
+        PostMessage:
+          Type: HttpApi
+          Properties:
+            ApiId: !Ref SignUpApi
+            Method: POST
+            Path: /distributionList
+      Role: !GetAtt 'ApiEndpointRole.Arn'
+      Timeout: 8
+      MemorySize: 128
+      Environment:
+        Variables:
+          DEPLOY_ENV: !Ref DeployEnv
+          DISTRIBUTION_LIST_TABLE_NAME: !Ref 'DistributionList'
+          SIGN_UP_PASSCODE_KEY_ID: !Sub '/${AWS::StackName}/SignUpEndpoint/SignUpPasscode'
+          PINPOINT_PROJECT_ID: !Ref PinpointProjectId
+
+  OptOutEndpoint:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: Accepts opt-out submissions
+      Runtime: python3.8
+      Layers:
+        - !Ref 'LambdaCommonLayer'
+      CodeUri: ./OptOutEndpoint
+      Handler: app.lambda.handler
+      Events:
+        DeleteMessage:
+          Type: HttpApi
+          Properties:
+            ApiId: !Ref SignUpApi
+            Method: DELETE
+            Path: /distributionList/{proxy+}
+      Role: !GetAtt 'ApiEndpointRole.Arn'
+      Timeout: 8
+      MemorySize: 128
+      Environment:
+        Variables:
+          DEPLOY_ENV: !Ref DeployEnv
+          DISTRIBUTION_LIST_TABLE_NAME: !Ref 'DistributionList'
 
   SendNotice:
     Type: AWS::Serverless::Function
