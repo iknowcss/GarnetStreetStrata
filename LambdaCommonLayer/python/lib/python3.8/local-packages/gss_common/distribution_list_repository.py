@@ -75,7 +75,7 @@ def delete_entry(destination_address, address_type):
     try:
         result = client.delete_item(
             TableName=table_name,
-            Key=DistributionListEntry(destination_address, address_type).to_ddb(),
+            Key={'DestinationAddress': {'S': destination_address}},
         )
         if result.get('ResponseMetadata').get('HTTPStatusCode') != 200:
             logger.warning('Failed to delete entry from distribution list', result)
