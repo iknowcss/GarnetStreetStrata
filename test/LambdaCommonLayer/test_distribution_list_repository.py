@@ -2,7 +2,7 @@ import mock
 import os
 import boto3
 from moto import mock_dynamodb2
-from gss_common.distribution_list_repository import get_entries, put_sms_entry
+from gss_common.distribution_list_repository import get_entries, delete_entry
 from gss_common.distribution_list_entry import DistributionListEntry, RecipientInfo
 
 
@@ -66,22 +66,46 @@ class TestDistributionListRepository:
     def test_get_destination_addresses_exception(self):
         self.__drop_table()
         result = get_entries()
-        assert result == None
+        assert result is None
 
-    def test_put_sms_entry(self):
-        self.seed_items([DistributionListEntry('+61400100100', 'SMS', RecipientInfo('RENTER'))])
-        assert put_sms_entry('+61400100200', RecipientInfo('OWNER', '49')).get('Success') is True
-        result = get_entries()
+    def test_delete_existing_entry(self):
+        self.seed_items([
+            DistributionListEntry('+61400100100', 'SMS', RecipientInfo('RENTER')),
+            DistributionListEntry('+61400100200', 'SMS', RecipientInfo('OWNER')),
+        ])
+
+        result = delete_entry('+61400100200', 'SMS')
+        assert result.get('Success') is True
+
+        remaining_entries = get_entries()
         assert set([(
             entry.destination_address,
             entry.address_type,
-            entry.recipient_info.occupant_type,
-            entry.recipient_info.unit_number,
-        ) for entry in result]) == {
-            ('+61400100100', 'SMS', 'RENTER', None),
-            ('+61400100200', 'SMS', 'OWNER', '49'),
+        ) for entry in remaining_entries]) == {
+            ('+61400100100', 'SMS'),
         }
 
-    def test_put_sms_entry_exception(self):
+    def test_delete_non_existent_entry(self):
+        self.seed_items([
+            DistributionListEntry('+61400100100', 'SMS', RecipientInfo('RENTER')),
+            DistributionListEntry('+61400100200', 'SMS', RecipientInfo('OWNER')),
+        ])
+
+        result = delete_entry('+61400100300', 'SMS')
+        assert result.get('Success') is True
+
+        remaining_entries = get_entries()
+        assert set([(
+            entry.destination_address,
+            entry.address_type,
+        ) for entry in remaining_entries]) == {
+            ('+61400100100', 'SMS'),
+            ('+61400100200', 'SMS'),
+        }
+
+    def test_delete_entry_exception(self):
         self.__drop_table()
-        assert put_sms_entry('+61400100200', RecipientInfo('RENTER')).get('Success') is False
+
+        result = delete_entry('+61400100200', 'SMS')
+
+        assert result.get('Success') is False

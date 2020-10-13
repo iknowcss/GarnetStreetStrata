@@ -66,30 +66,6 @@ class DistributionListEntry:
             recipient_info=RecipientInfo.from_ddb(ddb_item.get('RecipientInfo', {}).get('M', {})),
         )
 
-    def __init__(self, destination_address, address_type, recipient_info):
-        """
-        :param str destination_address:
-        :param str address_type:
-        :param RecipientInfo recipient_info:
-        """
-        self.destination_address = destination_address
-        self.address_type = address_type
-        self.recipient_info = recipient_info
-
-    def to_ddb(self):
-        return {
-            'DestinationAddress': {'S': self.destination_address},
-            'AddressType': {'S': self.address_type},
-            'RecipientInfo': self.recipient_info.to_ddb(),
-        }
-
-    def to_json_map(self):
-        return {
-            'DestinationAddress': self.destination_address,
-            'AddressType': self.address_type,
-            'RecipientInfo': self.recipient_info.to_json_map(),
-        }
-
     @staticmethod
     def from_json_map(json_map):
         destination_address = parse_value(DESTINATION_ADDRESS_SMS_AU, json_map.get('DestinationAddress', None))
@@ -103,3 +79,29 @@ class DistributionListEntry:
             })
             return None
         return DistributionListEntry(destination_address, address_type, recipient_info)
+
+    def __init__(self, destination_address, address_type, recipient_info=None):
+        """
+        :param str destination_address:
+        :param str address_type:
+        :param RecipientInfo recipient_info:
+        """
+        self.destination_address = destination_address
+        self.address_type = address_type
+        self.recipient_info = recipient_info
+
+    def to_ddb(self):
+        result = {
+            'DestinationAddress': {'S': self.destination_address},
+            'AddressType': {'S': self.address_type},
+        }
+        if self.recipient_info:
+            result['RecipientInfo'] = self.recipient_info.to_ddb()
+        return result
+
+    def to_json_map(self):
+        return {
+            'DestinationAddress': self.destination_address,
+            'AddressType': self.address_type,
+            'RecipientInfo': self.recipient_info.to_json_map(),
+        }

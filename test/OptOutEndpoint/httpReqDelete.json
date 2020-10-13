@@ -32,7 +32,7 @@
     "timeEpoch": 1600000000000
   },
   "pathParameters": {
-    "proxy": "+61400800900"
+    "proxy": "sms/+61400800900"
   },
   "isBase64Encoded": false
 }

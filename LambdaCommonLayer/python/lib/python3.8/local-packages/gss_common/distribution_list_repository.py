@@ -66,3 +66,22 @@ def put_entry(entry):
     except BaseException:
         logger.warning('Failed to add new destination to distribution list data source', exc_info=True)
         return {'Success': False}
+
+
+def delete_entry(destination_address, address_type):
+    client = boto3.client('dynamodb')
+    table_name = os.environ.get('DISTRIBUTION_LIST_TABLE_NAME')
+
+    try:
+        result = client.delete_item(
+            TableName=table_name,
+            Key=DistributionListEntry(destination_address, address_type).to_ddb(),
+        )
+        if result.get('ResponseMetadata').get('HTTPStatusCode') != 200:
+            logger.warning('Failed to delete entry from distribution list', result)
+            return {'Success': False}
+    except BaseException:
+        logger.warning('Failed to delete entry from distribution list', exc_info=True)
+        return {'Success': False}
+
+    return {'Success': True}
