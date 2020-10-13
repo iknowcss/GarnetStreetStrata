@@ -9,7 +9,7 @@
 <div class="main">
   <h1 class="main-heading">Garnet Street Strata</h1>
   <section class="main-content">
-    <div class="gss-form-container">
+    <div class="gss-form-container" id="OptOutFormContainer">
       <form class="pure-form pure-form-stacked gss-form" id="OptOutForm" method="POST">
         <fieldset>
           <legend>Opt-out of strata notifications</legend>
@@ -23,6 +23,8 @@
           <label for="mobileNumber">Australian mobile number <span class="gss-form-required-asterisk">*</span></label>
           <input type="tel" id="mobileNumber" name="mobileNumber" placeholder="0401 234 567" required="" class="pure-input-1">
 
+          <div class="gss-form-error-row" style="display:none"></div>
+
           <div class="gss-form-submit-row">
             <button type="submit" class="pure-button pure-button-primary gss-form-submit-button">Opt-out</button>
             <div class="gss-form-submit-spinner">
@@ -34,6 +36,17 @@
           </div>
         </fieldset>
       </form>
+    </div>
+
+    <div style="display:none" id="OptOutResultContainer">
+      <h2 class="gss-form-result__heading">You have been unsubscribed from all future messages.</h2>
+
+      <div class="gss-form-result__icon">
+        <svg id="Layer_1" style="enable-background:new 40 130 532 532;" version="1.1" viewBox="40 130 532 532" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+            <style type="text/css">.st0{fill:#41AD49;}</style>
+          <g><path class="st0" d="M562,396c0-141.4-114.6-256-256-256S50,254.6,50,396s114.6,256,256,256S562,537.4,562,396L562,396z    M501.7,296.3l-241,241l0,0l-17.2,17.2L110.3,421.3l58.8-58.8l74.5,74.5l199.4-199.4L501.7,296.3L501.7,296.3z"/></g>
+          </svg>
+      </div>
     </div>
   </section>
 </div>

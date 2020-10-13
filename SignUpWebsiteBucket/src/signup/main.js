@@ -1,5 +1,6 @@
 const FormDataAdapter = require('./FormDataAdapter');
 const FormSubmitLock = require('../common/FormSubmitLock');
+const { addClassNames, removeClassNames } = require('../common/domUtil');
 const { getSignUpPasscode, submitSignUp } = require('./signUpService');
 
 require('./main.scss');
@@ -9,17 +10,6 @@ const signUpFormContainer = document.getElementById('SignUpFormContainer');
 const signUpFormSubmitRow = document.getElementById('SignUpFormSubmitRow');
 const signUpSuccessContainer = document.getElementById('SignUpSuccessContainer');
 const signUpFormErrorRow = document.getElementById('SignUpFormErrorRow');
-
-function addClassNames(element, ...newClassNames) {
-  const classNames = (element.getAttribute('class') || '').split(/\s+/);
-  element.setAttribute('class', [...classNames, ...newClassNames].join(' '));
-}
-
-function removeClassNames(element, ...removeClassNames) {
-  const classNames = (element.getAttribute('class') || '').split(/\s+/);
-  const filteredNames = classNames.filter(className => removeClassNames.indexOf(className) < 0);
-  element.setAttribute('class', filteredNames.join(' '));
-}
 
 const formSubmitLock = new FormSubmitLock(signUpForm);
 function lockSignUp() {
