@@ -2,7 +2,7 @@ import mock
 import os
 import boto3
 from moto import mock_dynamodb2
-from gss_common.distribution_list_repository import get_entries, delete_entry
+from gss_common.distribution_list_repository import get_entries, put_entry, delete_entry
 from gss_common.distribution_list_entry import DistributionListEntry, RecipientInfo
 
 
@@ -109,3 +109,29 @@ class TestDistributionListRepository:
         result = delete_entry('+61400100200', 'SMS')
 
         assert result.get('Success') is False
+
+    def test_put_entry_without_passcode(self):
+        result = put_entry(
+            DistributionListEntry('+61400100100', 'SMS', RecipientInfo('RENTER')),
+        )
+
+        assert set([(
+            entry.destination_address,
+            entry.address_type,
+        ) for entry in get_entries()]) == {
+            ('+61400100100', 'SMS'),
+        }
+
+    # def test_put_entry_with(self):
+    #     result = put_entry(
+    #         DistributionListEntry('+61400100100', 'SMS', RecipientInfo('RENTER')),
+    #         'iloveanimals',
+    #     )
+    #
+    #     client = boto3.client('dynamodb')
+    #     table_name = os.environ.get('DISTRIBUTION_LIST_TABLE_NAME')
+    #     items = client.get_items(
+    #         TableName=table_name,
+    #         Key={''}
+    #     )
+    #     print(items)

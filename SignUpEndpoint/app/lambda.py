@@ -58,7 +58,8 @@ def handler(event, context):
             }),
         }
 
-    is_valid_passcode_result = is_valid_passcode(request.get('passcode'))
+    passcode = request.get('passcode')
+    is_valid_passcode_result = is_valid_passcode(passcode)
     if is_valid_passcode_result is None:
         logger.error('Failed to validate passcode')
         return {'statusCode': 500, 'body': json.dumps({'Success': False, 'Error': 'Failed to check passcode'})}

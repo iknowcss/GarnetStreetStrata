@@ -39,20 +39,26 @@ def put_sms_entry(destination_address, recipient_info):
 
     :param str destination_address: The endpoint address, e.g. `'+61400500600'`
     :param RecipientInfo recipient_info: The endpoint address, e.g. `'+61400500600'`
+    :param str sign_up_pass_code: The pass code used for sign-up
     :rtype: dict
     :returns: `{'Success': True}` when added successfully, otherwise `{'Success': False}`.
     """
     return put_entry(DistributionListEntry(destination_address, 'SMS', recipient_info))
 
 
-def put_entry(entry):
+def put_entry(entry, sign_up_pass_code=None):
     client = boto3.client('dynamodb')
     table_name = os.environ.get('DISTRIBUTION_LIST_TABLE_NAME')
+    if sign_up_pass_code:
+        sign_up_pass_code_ddb = {'S': sign_up_pass_code}
+    else:
+        sign_up_pass_code_ddb = None
 
     try:
         result = client.put_item(
             TableName=table_name,
             Item=entry.to_ddb(),
+            # SignUpPassCode=sign_up_pass_code_ddb,
             ReturnValues='ALL_OLD',
         )
         if result.get('ResponseMetadata').get('HTTPStatusCode') != 200:
