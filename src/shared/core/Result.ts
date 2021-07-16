@@ -49,44 +49,44 @@ export class Result<T> {
   }
 }
 
-export type Either<L, A> = Left<L, A> | Right<L, A>;
+export type Either<L, A> = Sad<L, A> | Happy<L, A>;
 
-export class Left<L, A> {
+export class Sad<L, A> {
   readonly value: L;
 
   constructor(value: L) {
     this.value = value;
   }
 
-  isLeft(): this is Left<L, A> {
+  isSad(): this is Sad<L, A> {
     return true;
   }
 
-  isRight(): this is Right<L, A> {
+  isHappy(): this is Happy<L, A> {
     return false;
   }
 }
 
-export class Right<L, A> {
+export class Happy<L, A> {
   readonly value: A;
 
   constructor(value: A) {
     this.value = value;
   }
 
-  isLeft(): this is Left<L, A> {
+  isSad(): this is Sad<L, A> {
     return false;
   }
 
-  isRight(): this is Right<L, A> {
+  isHappy(): this is Happy<L, A> {
     return true;
   }
 }
 
-export const left = <L, A>(l: L): Either<L, A> => {
-  return new Left(l);
+export const sad = <L, A>(l: L): Either<L, A> => {
+  return new Sad(l);
 };
 
-export const right = <L, A>(a: A): Either<L, A> => {
-  return new Right<L, A>(a);
+export const happy = <L, A>(a: A): Either<L, A> => {
+  return new Happy<L, A>(a);
 };
