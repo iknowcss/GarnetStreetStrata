@@ -2,6 +2,7 @@
 __pycache__/
 .venv/
 node_modules/
+build/
 .deploy.env
 *.pyc
 package-lock.json
