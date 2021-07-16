@@ -1,0 +1,16 @@
+{
+  "name": "garnet-street-strata",
+  "version": "0.0.0",
+  "description": "An SMS notification system",
+  "main": "index.js",
+  "repository": "git@github.com:iknowcss/GarnetStreetStrata.git",
+  "author": "iknowcss@gmail.com",
+  "private": true,
+  "devDependencies": {
+    "jest": "^27.0.6",
+    "typescript": "^4.3.5"
+  },
+  "dependencies": {
+    "uuid": "^8.3.2"
+  }
+}
