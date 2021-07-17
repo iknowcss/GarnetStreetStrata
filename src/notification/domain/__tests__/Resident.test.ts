@@ -9,5 +9,6 @@ describe('Resident', () => {
     const resident = Resident.create({ contactDetails, unitNumber }).getValue();
     expect(resident.contactDetails).toEqual(contactDetails);
     expect(resident.unitNumber).toEqual(unitNumber);
+    expect(resident.subscriptions.getItems()).toEqual([]);
   });
 });
