@@ -1,9 +1,9 @@
 import { Notification } from '../Notification';
-import { mockMessage } from '../../../shared/test/mock';
+import { testMessage } from '../../../shared/test/mock';
 
 describe('Notification', () => {
   it('creates', () => {
-    const messages = [mockMessage()];
+    const messages = [testMessage()];
     const notification = Notification.create({ messages }).getValue();
     expect(notification.messages).toEqual(messages);
     expect(notification.createdAt.constructor).toEqual(Date);

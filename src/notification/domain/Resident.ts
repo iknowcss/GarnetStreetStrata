@@ -1,12 +1,10 @@
 import { Entity } from '../../shared/domain/Entity';
 import { Result } from '../../shared/core/Result';
-import { ContactDetails } from './ContactDetails';
 import { UnitNumber } from './UnitNumber';
 import { Subscriptions } from './Subscription';
 import { UniqueEntityID } from '../../shared/domain/UniqueEntityID';
 
 export interface CreateResidentProps {
-  contactDetails: ContactDetails;
   unitNumber: UnitNumber;
 }
 
@@ -21,10 +19,6 @@ export class Resident extends Entity<ResidentProps> {
 
   static hydrate(props: ResidentProps, id: UniqueEntityID): Result<Resident> {
     return Result.ok(new Resident(props, id));
-  }
-
-  get contactDetails(): ContactDetails {
-    return this.props.contactDetails;
   }
 
   get unitNumber(): UnitNumber {

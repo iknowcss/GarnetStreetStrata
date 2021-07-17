@@ -3,9 +3,11 @@ import { Entity } from '../../shared/domain/Entity';
 import { Resident } from './Resident';
 import { WatchedList } from '../../shared/domain/WatchedList';
 import { UniqueEntityID } from '../../shared/domain/UniqueEntityID';
+import { ContactDetails } from './ContactDetails';
 
 export interface SubscriptionProps {
   resident: Resident;
+  contactDetails: ContactDetails<any>;
 }
 
 export class Subscription extends Entity<SubscriptionProps> {
@@ -19,6 +21,10 @@ export class Subscription extends Entity<SubscriptionProps> {
 
   get resident(): Resident {
     return this.props.resident;
+  }
+
+  get contactDetails(): ContactDetails<any> {
+    return this.props.contactDetails;
   }
 }
 
