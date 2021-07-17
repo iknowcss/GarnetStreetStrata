@@ -1,4 +1,4 @@
-import {PhoneNumber} from "../PhoneNumber";
+import { PhoneNumber } from '../PhoneNumber';
 
 describe('PhoneNumber', () => {
   it('creates a valid phone number', () => {

@@ -1,6 +1,6 @@
-import {Resident} from "../Resident";
-import {mockContactDetails} from "../../../shared/test/mock";
-import {UnitNumber} from "../UnitNumber";
+import { Resident } from '../Resident';
+import { mockContactDetails } from '../../../shared/test/mock';
+import { UnitNumber } from '../UnitNumber';
 
 describe('Resident', () => {
   it('creates a resident', () => {

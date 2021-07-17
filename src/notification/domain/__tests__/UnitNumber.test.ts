@@ -1,4 +1,4 @@
-import {UnitNumber} from "../UnitNumber";
+import { UnitNumber } from '../UnitNumber';
 
 describe('UnitNumber', () => {
   it('creates a valid unit number from an integer', () => {

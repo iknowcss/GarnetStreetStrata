@@ -1,7 +1,7 @@
-import {Entity} from "../../shared/domain/Entity";
-import {Result} from "../../shared/core/Result";
-import {ContactDetails} from "./ContactDetails";
-import {UnitNumber} from "./UnitNumber";
+import { Entity } from '../../shared/domain/Entity';
+import { Result } from '../../shared/core/Result';
+import { ContactDetails } from './ContactDetails';
+import { UnitNumber } from './UnitNumber';
 
 export interface ResidentProps {
   contactDetails: ContactDetails;

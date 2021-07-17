@@ -1,9 +1,9 @@
-import {ValueObject} from "../../shared/domain/ValueObject";
-import {PhoneNumber} from "./PhoneNumber";
-import {Result} from "../../shared/core/Result";
+import { ValueObject } from '../../shared/domain/ValueObject';
+import { PhoneNumber } from './PhoneNumber';
+import { Result } from '../../shared/core/Result';
 
 export interface ContactDetailsProps {
-  mobileNumber: PhoneNumber
+  mobileNumber: PhoneNumber;
 }
 
 export class ContactDetails extends ValueObject<ContactDetailsProps> {
