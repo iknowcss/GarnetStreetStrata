@@ -1,0 +1,25 @@
+import { UseCaseError } from '../../../shared/core/UseCaseError';
+
+export class SendNotificationMessageBodyError extends UseCaseError {
+  constructor(reason: string) {
+    super(`Message body is invalid: ${reason}`);
+  }
+}
+
+export class SendNotificationCreateNotificationError extends UseCaseError {
+  constructor(reason: string) {
+    super(`Failed to create notification: ${reason}`);
+  }
+}
+
+export class SendNotificationFetchSubscriptionsError extends UseCaseError {
+  constructor(reason: string) {
+    super(`Failed to fetch subscriptions: ${reason}`);
+  }
+}
+
+export class SendNotificationSendError extends UseCaseError {
+  constructor(reason: string) {
+    super(`Failed to send notification: ${reason}`);
+  }
+}

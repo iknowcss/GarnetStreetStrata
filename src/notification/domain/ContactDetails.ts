@@ -1,17 +1,14 @@
 import { ValueObject } from '../../shared/domain/ValueObject';
 import { Result } from '../../shared/core/Result';
 import { PhoneNumber } from './PhoneNumber';
-
-export enum ContactDetailsType {
-  SMS = 'SMS',
-}
+import { MessageType } from './Message';
 
 export interface ContactDetailsProps {
-  type: ContactDetailsType;
+  type: MessageType;
 }
 
-export class ContactDetails<TProps> extends ValueObject<ContactDetailsProps & Omit<TProps, 'type'>> {
-  get type(): ContactDetailsType {
+export abstract class ContactDetails<TProps> extends ValueObject<ContactDetailsProps & Omit<TProps, 'type'>> {
+  get type(): MessageType {
     return this.props.type;
   }
 }
@@ -22,7 +19,7 @@ export interface SmsContactDetailsProps {
 
 export class SmsContactDetails extends ContactDetails<SmsContactDetailsProps> {
   static create(props: SmsContactDetailsProps): Result<SmsContactDetails> {
-    return Result.ok(new SmsContactDetails({ ...props, type: ContactDetailsType.SMS }));
+    return Result.ok(new SmsContactDetails({ ...props, type: MessageType.SMS }));
   }
 
   get mobileNumber(): PhoneNumber {

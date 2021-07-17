@@ -3,7 +3,7 @@ import { Result } from '../../shared/core/Result';
 import { Message } from './Message';
 
 export interface CreateNotificationProps {
-  messages: Message[];
+  messages: Message<any>[];
 }
 
 export interface NotificationProps extends CreateNotificationProps {
@@ -20,7 +20,7 @@ export class Notification extends Entity<NotificationProps> {
     return Result.ok(new Notification({ messages, createdAt: new Date(), sentAt: null }));
   }
 
-  get messages(): Message[] {
+  get messages(): Message<any>[] {
     return this.props.messages;
   }
 
