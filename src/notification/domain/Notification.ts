@@ -3,7 +3,7 @@ import { Result } from '../../shared/core/Result';
 import { Message } from './Message';
 
 export interface CreateNotificationProps {
-  message: Message;
+  messages: Message[];
 }
 
 export interface NotificationProps extends CreateNotificationProps {
@@ -13,12 +13,15 @@ export interface NotificationProps extends CreateNotificationProps {
 
 export class Notification extends Entity<NotificationProps> {
   static create(props: CreateNotificationProps): Result<Notification> {
-    const { message } = props;
-    return Result.ok(new Notification({ message, createdAt: new Date(), sentAt: null }));
+    const { messages } = props;
+    if (messages.length === 0) {
+      return Result.fail('Must specify at least one message');
+    }
+    return Result.ok(new Notification({ messages, createdAt: new Date(), sentAt: null }));
   }
 
-  get message(): Message {
-    return this.props.message;
+  get messages(): Message[] {
+    return this.props.messages;
   }
 
   get createdAt(): Date {

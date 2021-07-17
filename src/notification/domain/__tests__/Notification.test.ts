@@ -1,12 +1,16 @@
 import { Notification } from '../Notification';
-import { Message } from '../Message';
+import { mockMessage } from '../../../shared/test/mock';
 
 describe('Notification', () => {
   it('creates', () => {
-    const message = Message.create({ body: 'This is a test' }).getValue();
-    const notification = Notification.create({ message }).getValue();
-    expect(notification.message).toEqual(message);
+    const messages = [mockMessage()];
+    const notification = Notification.create({ messages }).getValue();
+    expect(notification.messages).toEqual(messages);
     expect(notification.createdAt.constructor).toEqual(Date);
     expect(notification.sentAt).toBeNull();
+  });
+
+  it('does not create with empty messages array', () => {
+    expect(Notification.create({ messages: [] }).isFailure).toBe(true);
   });
 });
