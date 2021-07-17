@@ -12,4 +12,8 @@ export class Message extends ValueObject<MessageProps> {
     }
     return Result.ok(new Message(props));
   }
+
+  get body(): string {
+    return this.props.body;
+  }
 }
