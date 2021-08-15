@@ -3,37 +3,37 @@ import { Either, happy, Result, sad } from '../../../shared/core/Result';
 import { Notification } from '../../domain/Notification';
 import { SmsMessage } from '../../domain/Message';
 import {
-  SendSmsNotificationCreateNotificationError,
-  SendSmsNotificationGetResidentsError,
-  SendSmsNotificationMessageBodyError,
-  SendSmsNotificationSendError,
-} from './SendSmsNotificationErrors';
+  SendNotificationCreateNotificationError,
+  SendNotificationGetResidentsError,
+  SendNotificationMessageBodyError,
+  SendNotificationSendError,
+} from './SendNotificationErrors';
 import { ResidentGateway } from '../../gateways/ResidentGateway';
 import { NotificationGateway } from '../../gateways/NotificationGateway';
 
-export interface SendSmsNotificationRequest {
+export interface SendNotificationRequest {
   messageBody: string;
 }
 
 export type SendNotificationResponse = Either<
-  | SendSmsNotificationMessageBodyError
-  | SendSmsNotificationCreateNotificationError
-  | SendSmsNotificationGetResidentsError
-  | SendSmsNotificationSendError,
+  | SendNotificationMessageBodyError
+  | SendNotificationCreateNotificationError
+  | SendNotificationGetResidentsError
+  | SendNotificationSendError,
   Result<void>
 >;
 
-export class SendSmsNotification implements UseCase<SendSmsNotificationRequest, SendNotificationResponse> {
+export class SendNotification implements UseCase<SendNotificationRequest, SendNotificationResponse> {
   constructor(
     private readonly notificationGateway: NotificationGateway,
     private readonly residentGateway: ResidentGateway,
   ) {}
 
-  async execute(request: SendSmsNotificationRequest): Promise<SendNotificationResponse> {
+  async execute(request: SendNotificationRequest): Promise<SendNotificationResponse> {
     // Create the SmsMessage
     const smsMessageResult = SmsMessage.create({ body: request.messageBody });
     if (smsMessageResult.isFailure) {
-      return sad(new SendSmsNotificationMessageBodyError(smsMessageResult.errorValue().toString()));
+      return sad(new SendNotificationMessageBodyError(smsMessageResult.errorValue().toString()));
     }
     const smsMessage = smsMessageResult.getValue();
 
@@ -42,13 +42,13 @@ export class SendSmsNotification implements UseCase<SendSmsNotificationRequest, 
     try {
       residents = await this.residentGateway.getResidentsWithSubscription();
     } catch (error) {
-      return sad(new SendSmsNotificationGetResidentsError(error.message));
+      return sad(new SendNotificationGetResidentsError(error.message));
     }
 
     // Create the Notification containing the SmsMessage
     const notificationResult = Notification.create({ residents, messages: [smsMessage] });
     if (notificationResult.isFailure) {
-      return sad(new SendSmsNotificationCreateNotificationError(notificationResult.errorValue().toString()));
+      return sad(new SendNotificationCreateNotificationError(notificationResult.errorValue().toString()));
     }
     const notification = notificationResult.getValue();
 
@@ -56,7 +56,7 @@ export class SendSmsNotification implements UseCase<SendSmsNotificationRequest, 
     try {
       await this.notificationGateway.send(notification);
     } catch (error) {
-      return sad(new SendSmsNotificationSendError(error.message));
+      return sad(new SendNotificationSendError(error.message));
     }
 
     return happy(Result.ok());

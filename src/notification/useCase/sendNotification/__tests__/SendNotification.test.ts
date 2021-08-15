@@ -1,12 +1,12 @@
-import { SendSmsNotification } from '../SendSmsNotification';
+import { SendNotification } from '../SendNotification';
 import { SmsMessage } from '../../../domain/Message';
 import { Notification } from '../../../domain/Notification';
 import { testResident } from '../../../../shared/test/mock';
 
-describe('SendSmsNotification', () => {
+describe('SendNotification', () => {
   const notificationGateway = { send: jest.fn() };
   const residentGateway = { getResidentsWithSubscription: jest.fn() };
-  const useCase = new SendSmsNotification(notificationGateway as any, residentGateway as any);
+  const useCase = new SendNotification(notificationGateway as any, residentGateway as any);
 
   beforeEach(() => {
     jest.resetAllMocks();
