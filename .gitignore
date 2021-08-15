@@ -3,6 +3,8 @@ __pycache__/
 .venv/
 node_modules/
 build/
+.webpack/
+.serverless/
 .deploy.env
 *.pyc
 package-lock.json

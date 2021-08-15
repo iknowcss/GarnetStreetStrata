@@ -22,7 +22,11 @@ export abstract class BaseLambdaHttpController extends BaseLambdaHandler<
   }
 
   public jsonResponse(statusCode: StatusCodes, body?: any): HttpControllerResult {
-    return { statusCode, body, headers: { 'Content-Type': 'application/json' } };
+    return {
+      statusCode,
+      body: body !== undefined ? JSON.stringify(body) : body,
+      headers: { 'Content-Type': 'application/json' },
+    };
   }
 
   public ok<T>(dto?: T): HttpControllerResult {

@@ -1,5 +1,4 @@
 import { UseCase } from '../../../shared/core/UseCase';
-import { NotificationDTO } from '../../dtos/NotificationDTO';
 import { Either, happy, Result, sad } from '../../../shared/core/Result';
 import { Notification } from '../../domain/Notification';
 import { SmsMessage } from '../../domain/Message';
@@ -21,7 +20,7 @@ export type SendNotificationResponse = Either<
   | SendSmsNotificationCreateNotificationError
   | SendSmsNotificationGetResidentsError
   | SendSmsNotificationSendError,
-  Result<NotificationDTO>
+  Result<void>
 >;
 
 export class SendSmsNotification implements UseCase<SendSmsNotificationRequest, SendNotificationResponse> {

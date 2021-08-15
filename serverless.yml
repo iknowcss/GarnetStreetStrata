@@ -1,0 +1,49 @@
+service: garnet-street-strata
+
+frameworkVersion: ^2
+variablesResolutionMode: 20210326
+useDotenv: true
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+  region: ap-southeast-2
+  lambdaHashingVersion: 20201221
+  logs:
+    httpApi: true
+  memorySize: 512
+  logRetentionInDays: 14
+  httpApi:
+    name: garnet-street-strata
+  deploymentBucket:
+    blockPublicAccess: true
+    maxPreviousDeploymentArtifacts: 2
+
+plugins:
+  - serverless-offline
+  - serverless-webpack
+  - serverless-iam-roles-per-function
+  - serverless-prune-plugin
+
+custom:
+  serverless-offline:
+    ignoreJWTSignature: true
+
+  webpack:
+    webpackConfig: 'webpack.config.js'
+    includeModules:
+      forceExclude:
+        - aws-sdk
+    packager: yarn
+
+  prune:
+    automatic: true
+    number: 4
+
+functions:
+  apiRequestHandler:
+    handler: src/notification/infra/apiRequestHandler.handler
+    events:
+      - httpApi:
+          method: POST
+          path: /v1/notifications

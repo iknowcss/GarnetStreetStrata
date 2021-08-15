@@ -1,6 +1,4 @@
 import { ValueObject } from '../../shared/domain/ValueObject';
-import { Result } from '../../shared/core/Result';
-import { PhoneNumber } from './PhoneNumber';
 import { MessageType } from './Message';
 import { WatchedList } from '../../shared/domain/WatchedList';
 

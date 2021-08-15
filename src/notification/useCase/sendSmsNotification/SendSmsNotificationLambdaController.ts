@@ -11,6 +11,7 @@ export class SendSmsNotificationLambdaController extends BaseLambdaHttpControlle
   }
 
   protected executeImpl(event: HttpControllerRequestEvent): Promise<HttpControllerResult> {
+    event.toString();
     return this.ok();
   }
 }

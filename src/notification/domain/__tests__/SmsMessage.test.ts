@@ -1,6 +1,6 @@
-import { Message, SmsMessage } from '../Message';
+import { SmsMessage } from '../Message';
 
-describe('Message', () => {
+describe('SmsMessage', () => {
   it('creates', () => {
     const message = SmsMessage.create({ body: 'This is a test' }).getValue();
     expect(message.body).toEqual('This is a test');

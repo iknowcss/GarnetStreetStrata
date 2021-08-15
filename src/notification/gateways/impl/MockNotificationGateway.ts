@@ -7,6 +7,7 @@ export class MockNotificationGateway implements NotificationGateway {
   }
 
   async send(notification: Notification): Promise<void> {
+    notification.toString();
     throw new Error('Not implemented');
   }
 }
