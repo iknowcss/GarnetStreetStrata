@@ -5,6 +5,7 @@ import { Notification } from '../../domain/Notification';
 import { SmsMessage } from '../../domain/Message';
 import {
   SendSmsNotificationCreateNotificationError,
+  SendSmsNotificationGetResidentsError,
   SendSmsNotificationMessageBodyError,
   SendSmsNotificationSendError,
 } from './SendSmsNotificationErrors';
@@ -16,7 +17,10 @@ export interface SendSmsNotificationRequest {
 }
 
 export type SendNotificationResponse = Either<
-  SendSmsNotificationMessageBodyError | SendSmsNotificationCreateNotificationError | SendSmsNotificationSendError,
+  | SendSmsNotificationMessageBodyError
+  | SendSmsNotificationCreateNotificationError
+  | SendSmsNotificationGetResidentsError
+  | SendSmsNotificationSendError,
   Result<NotificationDTO>
 >;
 
@@ -35,7 +39,12 @@ export class SendSmsNotification implements UseCase<SendSmsNotificationRequest, 
     const smsMessage = smsMessageResult.getValue();
 
     // Get the residents who will receive the message
-    const residents = await this.residentGateway.getResidentsWithSubscription();
+    let residents;
+    try {
+      residents = await this.residentGateway.getResidentsWithSubscription();
+    } catch (error) {
+      return sad(new SendSmsNotificationGetResidentsError(error.message));
+    }
 
     // Create the Notification containing the SmsMessage
     const notificationResult = Notification.create({ residents, messages: [smsMessage] });

@@ -12,6 +12,12 @@ export class SendSmsNotificationCreateNotificationError extends UseCaseError {
   }
 }
 
+export class SendSmsNotificationGetResidentsError extends UseCaseError {
+  constructor(reason: string) {
+    super(`Failed to get residents: ${reason}`);
+  }
+}
+
 export class SendSmsNotificationSendError extends UseCaseError {
   constructor(reason: string) {
     super(`Failed to send notification: ${reason}`);
