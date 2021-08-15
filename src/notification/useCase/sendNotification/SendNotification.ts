@@ -1,7 +1,7 @@
 import { UseCase } from '../../../shared/core/UseCase';
 import { Either, happy, Result, sad } from '../../../shared/core/Result';
 import { Notification } from '../../domain/Notification';
-import { MessageType, SmsMessage, SmsMessageContent, SmsMessageProps } from '../../domain/Message';
+import { MessageType, SmsMessage, SmsMessageProps } from '../../domain/Message';
 import {
   SendNotificationCreateNotificationError,
   SendNotificationGetResidentsError,

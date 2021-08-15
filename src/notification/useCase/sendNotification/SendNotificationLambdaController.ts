@@ -6,7 +6,7 @@ import {
 } from '../../../shared/useCase/BaseLambdaHttpController';
 import { Result } from '../../../shared/core/Result';
 import { MessageDTO } from '../../dtos/MessageDTO';
-import {SendNotificationMessageBodyError} from "./SendNotificationErrors";
+import { SendNotificationMessageBodyError } from './SendNotificationErrors';
 
 interface SendNotificationRequestDTO {
   notification: {

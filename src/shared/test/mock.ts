@@ -11,7 +11,7 @@ export const testPhoneNumber = (): PhoneNumber => PhoneNumber.create({ number: '
 export const testSmsContactMethod = (): SmsContactMethod =>
   SmsContactMethod.create({ mobileNumber: testPhoneNumber() }).getValue();
 
-export const testMessage = (): SmsMessage => SmsMessage.create({ body: 'This is a test' }).getValue();
+export const testMessage = (): SmsMessage => SmsMessage.create({ content: { body: 'This is a test' } }).getValue();
 
 export const testUnitNumber = (): UnitNumber => UnitNumber.create(30).getValue();
 
