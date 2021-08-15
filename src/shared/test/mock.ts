@@ -1,4 +1,5 @@
-import { SmsContactMethod } from '../../notification/domain/ContactMethod';
+import { ContactMethods } from '../../notification/domain/ContactMethod';
+import { SmsContactMethod } from '../../notification/domain/SmsContactMethod';
 import { PhoneNumber } from '../../notification/domain/PhoneNumber';
 import { SmsMessage } from '../../notification/domain/Message';
 import { Resident, ResidentProps } from '../../notification/domain/Resident';
@@ -16,6 +17,6 @@ export const testUnitNumber = (): UnitNumber => UnitNumber.create(30).getValue()
 
 export const testResident = (overrides?: Partial<ResidentProps>, id?: string): Resident =>
   Resident.hydrate(
-    { unitNumber: testUnitNumber(), ...overrides },
+    { unitNumber: testUnitNumber(), contactMethods: ContactMethods.create([testSmsContactMethod()]), ...overrides },
     new UniqueEntityID(id || 'test-resident'),
   ).getValue();

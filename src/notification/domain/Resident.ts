@@ -2,16 +2,19 @@ import { Entity } from '../../shared/domain/Entity';
 import { Result } from '../../shared/core/Result';
 import { UnitNumber } from './UnitNumber';
 import { UniqueEntityID } from '../../shared/domain/UniqueEntityID';
+import { ContactMethods } from './ContactMethod';
 
 export interface CreateResidentProps {
   unitNumber: UnitNumber;
 }
 
-export type ResidentProps = CreateResidentProps;
+export interface ResidentProps extends CreateResidentProps {
+  contactMethods: ContactMethods;
+}
 
 export class Resident extends Entity<ResidentProps> {
   static create(props: CreateResidentProps): Result<Resident> {
-    return Result.ok(new Resident({ ...props }));
+    return Result.ok(new Resident({ ...props, contactMethods: ContactMethods.create() }));
   }
 
   static hydrate(props: ResidentProps, id: UniqueEntityID): Result<Resident> {

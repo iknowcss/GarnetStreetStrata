@@ -2,27 +2,28 @@ import { ValueObject } from '../../shared/domain/ValueObject';
 import { Result } from '../../shared/core/Result';
 import { PhoneNumber } from './PhoneNumber';
 import { MessageType } from './Message';
+import { WatchedList } from '../../shared/domain/WatchedList';
 
 export interface ContactMethodProps {
   type: MessageType;
 }
 
-export abstract class ContactMethod<TProps> extends ValueObject<ContactMethodProps & Omit<TProps, 'type'>> {
+export abstract class ContactMethod<TProps = any> extends ValueObject<ContactMethodProps & Omit<TProps, 'type'>> {
   get type(): MessageType {
     return this.props.type;
   }
 }
 
-export interface SmsContactMethodProps {
-  mobileNumber: PhoneNumber;
-}
-
-export class SmsContactMethod extends ContactMethod<SmsContactMethodProps> {
-  static create(props: SmsContactMethodProps): Result<SmsContactMethod> {
-    return Result.ok(new SmsContactMethod({ ...props, type: MessageType.SMS }));
+export class ContactMethods extends WatchedList<ContactMethod> {
+  private constructor(contactMethods: ContactMethod[]) {
+    super(contactMethods);
   }
 
-  get mobileNumber(): PhoneNumber {
-    return this.props.mobileNumber;
+  compareItems(a: ContactMethod, b: ContactMethod): boolean {
+    return a.equals(b);
+  }
+
+  public static create(contactMethods?: ContactMethod[]): ContactMethods {
+    return new ContactMethods(contactMethods || []);
   }
 }
