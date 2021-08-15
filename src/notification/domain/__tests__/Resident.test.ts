@@ -6,6 +6,5 @@ describe('Resident', () => {
     const unitNumber = UnitNumber.create(30).getValue();
     const resident = Resident.create({ unitNumber }).getValue();
     expect(resident.unitNumber).toEqual(unitNumber);
-    expect(resident.subscriptions.getItems()).toEqual([]);
   });
 });

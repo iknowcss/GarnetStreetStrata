@@ -12,12 +12,6 @@ export class SendNotificationCreateNotificationError extends UseCaseError {
   }
 }
 
-export class SendNotificationFetchSubscriptionsError extends UseCaseError {
-  constructor(reason: string) {
-    super(`Failed to fetch subscriptions: ${reason}`);
-  }
-}
-
 export class SendNotificationSendError extends UseCaseError {
   constructor(reason: string) {
     super(`Failed to send notification: ${reason}`);
