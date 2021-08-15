@@ -5,29 +5,30 @@ export enum MessageType {
   SMS = 'SMS',
 }
 
-export interface MessageProps {
+export interface MessageProps<ContentType> {
   type: MessageType;
+  content: ContentType;
 }
 
-export abstract class Message<Props = any> extends ValueObject<MessageProps & Omit<Props, 'type'>> {
+export abstract class Message<ContentType = any> extends ValueObject<MessageProps<ContentType>> {
   get type(): MessageType {
     return this.props.type;
   }
+
+  get content(): ContentType {
+    return this.props.content;
+  }
 }
 
-export interface SmsMessageProps {
+export interface SmsMessageContent {
   body: string;
 }
 
-export class SmsMessage extends Message<SmsMessageProps> {
-  static create(props: SmsMessageProps): Result<SmsMessage> {
-    if (!props.body) {
-      return Result.fail('The SMS message body is empty or not specified');
-    }
-    return Result.ok(new SmsMessage({ ...props, type: MessageType.SMS }));
-  }
+export type SmsMessageProps = Omit<MessageProps<SmsMessageContent>, 'type'>;
 
-  get body(): string {
-    return this.props.body;
+export class SmsMessage extends Message<SmsMessageContent> {
+  static create(props: SmsMessageProps): Result<SmsMessage> {
+    if (!props?.content?.body) return Result.fail('The SMS message body is empty or not specified');
+    return Result.ok(new SmsMessage({ ...props, type: MessageType.SMS }));
   }
 }

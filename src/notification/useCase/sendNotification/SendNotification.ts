@@ -1,7 +1,7 @@
 import { UseCase } from '../../../shared/core/UseCase';
 import { Either, happy, Result, sad } from '../../../shared/core/Result';
 import { Notification } from '../../domain/Notification';
-import { SmsMessage } from '../../domain/Message';
+import { MessageType, SmsMessage, SmsMessageContent, SmsMessageProps } from '../../domain/Message';
 import {
   SendNotificationCreateNotificationError,
   SendNotificationGetResidentsError,
@@ -10,9 +10,10 @@ import {
 } from './SendNotificationErrors';
 import { ResidentGateway } from '../../gateways/ResidentGateway';
 import { NotificationGateway } from '../../gateways/NotificationGateway';
+import { MessageDTO } from '../../dtos/MessageDTO';
 
 export interface SendNotificationRequest {
-  messageBody: string;
+  messages: MessageDTO[];
 }
 
 export type SendNotificationResponse = Either<
@@ -30,8 +31,10 @@ export class SendNotification implements UseCase<SendNotificationRequest, SendNo
   ) {}
 
   async execute(request: SendNotificationRequest): Promise<SendNotificationResponse> {
+    const smsMessageDTO = request.messages.find((message) => message.type === MessageType.SMS) as SmsMessageProps;
+
     // Create the SmsMessage
-    const smsMessageResult = SmsMessage.create({ body: request.messageBody });
+    const smsMessageResult = SmsMessage.create(smsMessageDTO);
     if (smsMessageResult.isFailure) {
       return sad(new SendNotificationMessageBodyError(smsMessageResult.errorValue().toString()));
     }
