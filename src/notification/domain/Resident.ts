@@ -21,7 +21,15 @@ export class Resident extends Entity<ResidentProps> {
     return Result.ok(new Resident(props, id));
   }
 
+  get id(): UniqueEntityID {
+    return this._id;
+  }
+
   get unitNumber(): UnitNumber {
     return this.props.unitNumber;
+  }
+
+  get contactMethods(): ContactMethods {
+    return this.props.contactMethods;
   }
 }

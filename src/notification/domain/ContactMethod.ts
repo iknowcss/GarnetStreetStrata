@@ -2,14 +2,21 @@ import { ValueObject } from '../../shared/domain/ValueObject';
 import { MessageType } from './Message';
 import { WatchedList } from '../../shared/domain/WatchedList';
 
-export interface ContactMethodProps {
+export interface ContactMethodProps<InfoType = any> {
   type: MessageType;
+  info: InfoType;
 }
 
-export abstract class ContactMethod<TProps = any> extends ValueObject<ContactMethodProps & Omit<TProps, 'type'>> {
+export abstract class ContactMethod<InfoType = any> extends ValueObject<ContactMethodProps<InfoType>> {
   get type(): MessageType {
     return this.props.type;
   }
+
+  get info(): InfoType {
+    return this.props.info;
+  }
+
+  abstract infoToJSON(): string;
 }
 
 export class ContactMethods extends WatchedList<ContactMethod> {

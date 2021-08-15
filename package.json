@@ -8,6 +8,7 @@
   "private": true,
   "scripts": {
     "dev": "npx sls offline start -s offline --host 0.0.0.0 --noPrependStageInUrl --noAuth",
+    "localstack:start": "docker run --rm -it -p 4566:4566 -p 4571:4571 -e SERVICES=dynamodb localstack/localstack",
     "test": "jest",
     "lint": "eslint . --ext .ts"
   },
@@ -23,6 +24,7 @@
     "@types/uuid": "^8.3.1",
     "@typescript-eslint/eslint-plugin": "^4.28.3",
     "@typescript-eslint/parser": "^4.28.3",
+    "aws-sdk": "^2.968.0",
     "babel-jest": "^27.0.6",
     "eslint": "^7.30.0",
     "eslint-config-prettier": "^8.3.0",
