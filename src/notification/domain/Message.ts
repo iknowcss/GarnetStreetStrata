@@ -9,7 +9,7 @@ export interface MessageProps {
   type: MessageType;
 }
 
-export abstract class Message<Props> extends ValueObject<MessageProps & Omit<Props, 'type'>> {
+export abstract class Message<Props = any> extends ValueObject<MessageProps & Omit<Props, 'type'>> {
   get type(): MessageType {
     return this.props.type;
   }

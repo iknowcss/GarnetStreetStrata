@@ -1,18 +1,18 @@
 import { UseCaseError } from '../../../shared/core/UseCaseError';
 
-export class SendNotificationMessageBodyError extends UseCaseError {
+export class SendSmsNotificationMessageBodyError extends UseCaseError {
   constructor(reason: string) {
     super(`Message body is invalid: ${reason}`);
   }
 }
 
-export class SendNotificationCreateNotificationError extends UseCaseError {
+export class SendSmsNotificationCreateNotificationError extends UseCaseError {
   constructor(reason: string) {
     super(`Failed to create notification: ${reason}`);
   }
 }
 
-export class SendNotificationSendError extends UseCaseError {
+export class SendSmsNotificationSendError extends UseCaseError {
   constructor(reason: string) {
     super(`Failed to send notification: ${reason}`);
   }
